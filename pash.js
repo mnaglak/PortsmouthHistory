@@ -23,24 +23,28 @@ var portsmouth1925 = L.tileLayer('./georeferencedMaps/1925/1925/{z}/{x}/{y}.png'
 var portsmouth1953 = L.tileLayer('./georeferencedMaps/1953/1953/{z}/{x}/{y}.png', {tms: true, attribution: "", minZoom: 13, maxZoom: 18});
 var portsmouth1980 = L.tileLayer('./georeferencedMaps/1980/1980/{z}/{x}/{y}.png', {tms: true, attribution: "", minZoom: 13, maxZoom: 18});
 
-var pointsOfInterest =  new L.GeoJSON.AJAX("locations.geojson", {
 
+
+
+var allsites =  L.geoJSON(sites, {
 		//this will eventually be removed when fully integrated into the sidebar with no popup boxes on the map, only swapstyle will be left
 		onEachFeature: function (feature, layer) {
 			var out = [];
 				if (feature.properties){
 					out.push("<b>Name: </b>" +feature.properties.Name);
-					out.push("<b>Description: </b>" +feature.properties.Description);
+					out.push("<b>Description: </b>" +feature.properties.Blurb);
 					out.push("<b>Credit: </b>" +feature.properties.Credit);
 					/*for(key in f.properties){
 						out.push(key+": "+f.properties[key]); //pushes out .geoJSON attributes exported from ArcGIS
 					}*/
 				}
 			layer.bindPopup(out.join("<br />"));
-		},
-		style: swapStyle
+		}
 	});
+allsites.addTo(map);
 
+var ocean =  L.geoJSON(ocean550);
+var depth = L.geoJSON(depth550);
 //List of desired baseMap layers
 //Right now it just includes our modern underlay
 	var baseLayers = {
@@ -58,14 +62,60 @@ var pointsOfInterest =  new L.GeoJSON.AJAX("locations.geojson", {
 			"<a target='_blank' href=''>1876</a>" : portsmouth1876,
 			"<a target='_blank' href=''>1925</a>" : portsmouth1925,
 			"<a target='_blank' href=''>1953</a>" : portsmouth1953,
-			"<a target='_blank' href=''>1980</a>" : portsmouth1980
+			"<a target='_blank' href=''>1980</a>" : portsmouth1980,
+      "All Sites": allsites,
+      "Ocean": ocean,
+      "Depth": depth
 			};
 
 //Then this created the actual control box
 	var mapLayers = L.control.layers(baseLayers, overlayMaps);
   mapLayers.addTo(map)
 
+  var eraSlider = document.getElementById('slider');
+  noUiSlider.create(eraSlider, {
+      start: [3],
+      step:1,
+      range: {
+          'min': [0],
+          'max': [6]
+      },
+      tooltips:true,
+      format: {
+        to: function(value) {
+        // Math.round and -1, so 1.00 => 0, 2.00 => 2, etc.
+        return [1779,1813,1850,1876,1925,1953,1980][Math.round(value)];
+      },
+      from: Number
+      }
+  });
+  var eraValues = [
+    document.getElementById('era-hidden')
+  ];
+  eraSlider.noUiSlider.on('change', function (values, handle) {
+      eraFilter = values[handle];
+      console.log(eraFilter);
+      map.removeLayer(allsites);
 
+      allsites = new L.geoJson(sites,{
+        onEachFeature:popUp,
+        filter:
+        function(feature, layer) {
+          return (feature.properties.StartDate <= eraFilter <=feature.properties.EndDate );
+        }
+    }).addTo(map);
+  });
+
+
+  //disable panning while sliding
+        slider.addEventListener('mouseover', function () {
+                map.dragging.disable();
+            });
+
+            // Re-enable dragging when user's cursor leaves the element
+        slider.addEventListener('mouseout', function () {
+              map.dragging.enable();
+            });
 /*
 var surveyArea = L.geoJSON(zoneAreas, {style: {color:"red", stroke:1, fillOpacity:0}}).addTo(map);
 
