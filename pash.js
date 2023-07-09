@@ -39,7 +39,11 @@ var allsites =  L.geoJSON(sites, {
 					}*/
 				}
 			layer.bindPopup(out.join("<br />"));
-		}
+		},
+    filter:
+    function(feature, layer) {
+      return (feature.properties.StartDate==1779 );
+    }
 	});
 allsites.addTo(map);
 
@@ -74,34 +78,52 @@ var depth = L.geoJSON(depth550);
 
   var eraSlider = document.getElementById('slider');
   noUiSlider.create(eraSlider, {
-      start: [3],
-      step:1,
+      start: [1779],
+      snap: true,
       range: {
-          'min': [0],
-          'max': [6]
+          'min': [1779],
+          '14%': [1813],
+          '28%': [1850],
+          '42%': [1876],
+          '57%': [1925],
+          '71%': [1953],
+          '85%': [1980],
+          'max': [2100]
       },
-      tooltips:true,
-      format: {
-        to: function(value) {
-        // Math.round and -1, so 1.00 => 0, 2.00 => 2, etc.
-        return [1779,1813,1850,1876,1925,1953,1980][Math.round(value)];
-      },
-      from: Number
+      tooltips:[
+        wNumb({decimals: 0})],
+
+      pips: {
+        mode: 'steps',
+        density: 7.5,
+        format: wNumb({decimals:0})
       }
+
+
+
   });
-  var eraValues = [
-    document.getElementById('era-hidden')
-  ];
+
   eraSlider.noUiSlider.on('change', function (values, handle) {
       eraFilter = values[handle];
       console.log(eraFilter);
       map.removeLayer(allsites);
 
       allsites = new L.geoJson(sites,{
-        onEachFeature:popUp,
+        onEachFeature: function (feature, layer) {
+    			var out = [];
+    				if (feature.properties){
+    					out.push("<b>Name: </b>" +feature.properties.Name);
+    					out.push("<b>Description: </b>" +feature.properties.Blurb);
+    					out.push("<b>Credit: </b>" +feature.properties.Credit);
+    					/*for(key in f.properties){
+    						out.push(key+": "+f.properties[key]); //pushes out .geoJSON attributes exported from ArcGIS
+    					}*/
+    				}
+    			layer.bindPopup(out.join("<br />"));
+    		},
         filter:
         function(feature, layer) {
-          return (feature.properties.StartDate <= eraFilter <=feature.properties.EndDate );
+          return (eraFilter>=feature.properties.StartDate );
         }
     }).addTo(map);
   });
