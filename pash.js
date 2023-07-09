@@ -67,7 +67,6 @@ var depth = L.geoJSON(depth550);
 			"<a target='_blank' href=''>1925</a>" : portsmouth1925,
 			"<a target='_blank' href=''>1953</a>" : portsmouth1953,
 			"<a target='_blank' href=''>1980</a>" : portsmouth1980,
-      "All Sites": allsites,
       "Ocean": ocean,
       "Depth": depth
 			};
