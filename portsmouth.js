@@ -25,20 +25,23 @@ var portsmouth1980 = L.tileLayer('./georeferencedMaps/1980/1980/{z}/{x}/{y}.png'
 
 
 
+imageloc="./thumbs/";
 
 var allsites =  L.geoJSON(sites, {
 		//this will eventually be removed when fully integrated into the sidebar with no popup boxes on the map, only swapstyle will be left
 		onEachFeature: function (feature, layer) {
 			var out = [];
 				if (feature.properties){
-					out.push("<b>Name: </b>" +feature.properties.Name);
-					out.push("<b>Description: </b>" +feature.properties.Blurb);
+					out.push("<b style='font-size: 16px !important;'>" + feature.properties.Name + "</b>" );
+					out.push("<i>" +feature.properties.Blurb +"</i>");
 					out.push("<b>Credit: </b>" +feature.properties.Credit);
+          out.push("<img src='" + imageloc+feature.properties.OBJECTID + ".jpg'/>");
 					/*for(key in f.properties){
 						out.push(key+": "+f.properties[key]); //pushes out .geoJSON attributes exported from ArcGIS
 					}*/
 				}
-			layer.bindPopup(out.join("<br />"));
+			layer.bindPopup(out.join("<br />"), {height: "600px", width:"1000px", closeOnClick:true});
+
 		},
     filter:
     function(feature, layer) {
@@ -46,6 +49,12 @@ var allsites =  L.geoJSON(sites, {
     }
 	});
 allsites.addTo(map);
+
+map.on('popupopen', function(e) {
+    var px = map.project(e.target._popup._latlng); // find the pixel location on the map where the popup anchor is
+    px.y -= e.target._popup._container.clientHeight/2; // find the height of the popup container, divide by 2, subtract from the Y axis of marker location
+    map.panTo(map.unproject(px),{animate: true}); // pan to new center
+});
 
 var ocean =  L.geoJSON(ocean550);
 var depth = L.geoJSON(depth550);
