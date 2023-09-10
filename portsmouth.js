@@ -32,10 +32,12 @@ var allsites =  L.geoJSON(sites, {
 		onEachFeature: function (feature, layer) {
 			var out = [];
 				if (feature.properties){
-					out.push("<b style='font-size: 16px !important;'>" + feature.properties.Name + "</b>" );
-					out.push("<i>" +feature.properties.Blurb +"</i>");
-					out.push("<b>Credit: </b>" +feature.properties.Credit);
           out.push("<img src='" + imageloc+feature.properties.OBJECTID + ".jpg'/>");
+          out.push("<b>Credit: </b>" +feature.properties.Credit);
+          out.push("<b style='font-size: 17px !important;'>" + feature.properties.Name + "</b>" );
+          out.push("<i style='font-size:12px !important;'>" +feature.properties.Blurb +"</i>");
+
+
 					/*for(key in f.properties){
 						out.push(key+": "+f.properties[key]); //pushes out .geoJSON attributes exported from ArcGIS
 					}*/
@@ -120,10 +122,13 @@ var depth = L.geoJSON(depth550);
         onEachFeature: function (feature, layer) {
     			var out = [];
           if (feature.properties){
-            out.push("<b style='font-size: 16px !important;'>" + feature.properties.Name + "</b>" );
-            out.push("<i>" +feature.properties.Blurb +"</i>");
-            out.push("<b>Credit: </b>" +feature.properties.Credit);
             out.push("<img src='" + imageloc+feature.properties.OBJECTID + ".jpg'/>");
+            out.push("<b>Credit: </b>" +feature.properties.Credit);
+            out.push("<b style='font-size: 16px !important;'>" + feature.properties.Name + "</b>" );
+            out.push("<i style='font-size:12px !important;'>" +feature.properties.Blurb +"</i>");
+
+
+
             /*for(key in f.properties){
               out.push(key+": "+f.properties[key]); //pushes out .geoJSON attributes exported from ArcGIS
             }*/
