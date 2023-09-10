@@ -119,15 +119,16 @@ var depth = L.geoJSON(depth550);
       allsites = new L.geoJson(sites,{
         onEachFeature: function (feature, layer) {
     			var out = [];
-    				if (feature.properties){
-    					out.push("<b>Name: </b>" +feature.properties.Name);
-    					out.push("<b>Description: </b>" +feature.properties.Blurb);
-    					out.push("<b>Credit: </b>" +feature.properties.Credit);
-    					/*for(key in f.properties){
-    						out.push(key+": "+f.properties[key]); //pushes out .geoJSON attributes exported from ArcGIS
-    					}*/
-    				}
-    			layer.bindPopup(out.join("<br />"));
+          if (feature.properties){
+            out.push("<b style='font-size: 16px !important;'>" + feature.properties.Name + "</b>" );
+            out.push("<i>" +feature.properties.Blurb +"</i>");
+            out.push("<b>Credit: </b>" +feature.properties.Credit);
+            out.push("<img src='" + imageloc+feature.properties.OBJECTID + ".jpg'/>");
+            /*for(key in f.properties){
+              out.push(key+": "+f.properties[key]); //pushes out .geoJSON attributes exported from ArcGIS
+            }*/
+          }
+        layer.bindPopup(out.join("<br />"), {height: "600px", width:"1000px", closeOnClick:true});
     		},
         filter:
         function(feature, layer) {
