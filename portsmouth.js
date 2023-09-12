@@ -4,7 +4,8 @@ var mapOptions = {
   maxZoom : 19,  //set max zoom
   minZoom : 6,
   maxBounds: [ [-90, -180] , [90,180] ],
-  tap: false
+  tap: false,
+  fullscreenControl:true
   }
 
 var map = L.map('map', mapOptions);
@@ -77,9 +78,9 @@ var depth = L.geoJSON(depth550);
 			"<a target='_blank' href=''>1876</a>" : portsmouth1876,
 			"<a target='_blank' href=''>1925</a>" : portsmouth1925,
 			"<a target='_blank' href=''>1953</a>" : portsmouth1953,
-			"<a target='_blank' href=''>1980</a>" : portsmouth1980,
-      "Ocean": ocean,
-      "Depth": depth
+			"<a target='_blank' href=''>1980</a>" : portsmouth1980
+      //"Ocean": ocean,
+      //"Depth": depth
 			};
 
 //Then this created the actual control box
@@ -112,15 +113,21 @@ var depth = L.geoJSON(depth550);
 
 
   });
-
+function oceanCheck(filter) {
+  if (filter==2100) {
+    map.addLayer(ocean);
+  }
+}
   eraSlider.noUiSlider.on('change', function (values, handle) {
       eraFilter = values[handle];
       console.log(eraFilter);
       map.removeLayer(allsites);
-
+      map.removeLayer(ocean);
+      oceanCheck(eraFilter);
       allsites = new L.geoJson(sites,{
         onEachFeature: function (feature, layer) {
     			var out = [];
+
           if (feature.properties){
             out.push("<img src='" + imageloc+feature.properties.OBJECTID + ".jpg'/>");
             out.push("<b>Credit: </b>" +feature.properties.Credit);
