@@ -1,5 +1,5 @@
 var mapOptions = {
-  center: [43.070376, -70.773760], //set center
+  center: [43.073168,-70.761930], //set center
   zoom: 15 , //set initial zoom
   maxZoom : 19,  //set max zoom
   minZoom : 6,
@@ -149,6 +149,16 @@ function oceanCheck(filter) {
     }).addTo(map);
   });
 
+  var popup = L.popup({className: "custom-popup"})
+      .setLatLng([43.073168,-70.761930])
+      .setContent("<img style=' height:325px' src=.\\thumbs\\splashscreenreduced.jpg>")
+      .openOn(map);
+
+  var helloPopup = L.popup({className: "custom-popup"}).setContent("<img style=' height:325px' src=.\\thumbs\\splashscreenreduced.jpg>");
+
+      L.easyButton("<img style='height:25px' src=.\\thumbs\\info.jpg>", function(btn, map){
+          helloPopup.setLatLng([43.073168,-70.761930]).openOn(map);
+      }).addTo(map);
 
   //disable panning while sliding
         slider.addEventListener('mouseover', function () {
