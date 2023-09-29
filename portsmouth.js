@@ -101,8 +101,8 @@ var depth = L.geoJSON(depth550);
           '85%': [1980],
           'max': [2100]
       },
-      tooltips:[
-        wNumb({decimals: 0})],
+    //  tooltips:[
+    //    wNumb({decimals: 0})],
 
       pips: {
         mode: 'steps',
