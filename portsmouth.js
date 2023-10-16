@@ -60,6 +60,7 @@ map.on('popupopen', function(e) {
 });
 
 var ocean =  L.geoJSON(ocean550);
+
 var depth = L.geoJSON(depth550);
 //List of desired baseMap layers
 //Right now it just includes our modern underlay
@@ -85,7 +86,7 @@ var depth = L.geoJSON(depth550);
 
 //Then this created the actual control box
 	var mapLayers = L.control.layers(baseLayers, overlayMaps);
-  mapLayers.addTo(map)
+  //mapLayers.addTo(map)
 
   var eraSlider = document.getElementById('slider');
   noUiSlider.create(eraSlider, {
@@ -113,17 +114,57 @@ var depth = L.geoJSON(depth550);
 
 
   });
+
+var oceanMarker = L.marker([43.073168,-70.761930]);
+oceanMarker.bindPopup("This layer, from the City of Portsmouth's Coastal Resilience Initiative, shows what Portsmouth may look like in the year 2100 with the worst-case-scenario of a storm surge combined with rising ocean levels: eighteen feet.  https://www.cityofportsmouth.com/planportsmouth/cri").openPopup();
+
 function oceanCheck(filter) {
   if (filter==2100) {
     map.addLayer(ocean);
+    map.addLayer(oceanMarker);
   }
 }
+
+function mapCheck(filter) {
+  if (filter==1779) {
+    map.addLayer(portsmouth1779);
+  }
+  else if (filter==1813) {
+    map.addLayer(portsmouth1813);
+  }
+  else if (filter==1850) {
+    map.addLayer(portsmouth1850);
+  }
+  else if (filter==1876) {
+    map.addLayer(portsmouth1876);
+  }
+  else if (filter==1925) {
+    map.addLayer(portsmouth1925);
+  }
+  else if (filter==1953) {
+    map.addLayer(portsmouth1953);
+  }
+  else {
+    map.addLayer(portsmouth1980)
+  }
+}
+
   eraSlider.noUiSlider.on('change', function (values, handle) {
       eraFilter = values[handle];
       console.log(eraFilter);
       map.removeLayer(allsites);
       map.removeLayer(ocean);
+      map.removeLayer(portsmouth1779);
+      map.removeLayer(portsmouth1813);
+      map.removeLayer(portsmouth1850);
+      map.removeLayer(portsmouth1876);
+      map.removeLayer(portsmouth1925);
+      map.removeLayer(portsmouth1953);
+      map.removeLayer(portsmouth1980);
+
       oceanCheck(eraFilter);
+      mapCheck(eraFilter)
+
       allsites = new L.geoJson(sites,{
         onEachFeature: function (feature, layer) {
     			var out = [];
