@@ -27,6 +27,10 @@ var portsmouth1980 = L.tileLayer('./georeferencedMaps/1980/1980/{z}/{x}/{y}.png'
 
 
 imageloc="./thumbs/";
+var oceanMarker= L.marker([43.072536, -70.746833]);
+var oceanPopup = L.popup({className: "custom-popup"})
+    .setContent("This layer, from the City of Portsmouth's Coastal Resilience Initiative, shows what Portsmouth may look like in the year 2100 with the worst-case-scenario of a storm surge combined with rising ocean levels: eighteen feet. For more information, see: https://www.cityofportsmouth.com/planportsmouth/cri");
+oceanMarker.bindPopup(oceanPopup);
 
 var allsites =  L.geoJSON(sites, {
   pointToLayer: function (feature, latlng) {
@@ -68,22 +72,7 @@ map.on('popupopen', function(e) {
     map.panTo(map.unproject(px),{animate: true}); // pan to new center
 });
 
-var ocean =  L.geoJSON(ocean550 , {
-		onEachFeature: function (feature, layer) {
-			var out = [];
-				if (feature.properties){
-          out.push(feature.properties.Des + " For more information, see: " + feature.properties.URL);
-
-          out.push("<img src='./thumbs/demonstrationreduced.jpg'/>");
-
-
-					/*for(key in f.properties){
-						out.push(key+": "+f.properties[key]); //pushes out .geoJSON attributes exported from ArcGIS
-					}*/
-				}
-			layer.bindPopup(out.join("<br />"), {closeOnClick:true});
-
-		},});
+var ocean =  L.geoJSON(ocean550);
 
 var depth = L.geoJSON(depth550);
 //List of desired baseMap layers
@@ -154,6 +143,8 @@ function oceanCheck(filter) {
     map.addLayer(ocean);
     map.addLayer(oceanMarker);
   }
+  else
+    map.removeLayer(oceanMarker);
 }
 
 function mapCheck(filter) {
