@@ -29,7 +29,16 @@ var portsmouth1980 = L.tileLayer('./georeferencedMaps/1980/1980/{z}/{x}/{y}.png'
 imageloc="./thumbs/";
 
 var allsites =  L.geoJSON(sites, {
-		//this will eventually be removed when fully integrated into the sidebar with no popup boxes on the map, only swapstyle will be left
+  pointToLayer: function (feature, latlng) {
+    var markerStyle = {
+        fillColor: getColor(feature.properties.StartDate),
+        color: "#FFF",
+        fillOpacity: 1,
+        opacity: 0.5,
+        weight: 1,
+        radius: 10
+    };
+    return L.circleMarker(latlng, markerStyle);},
 		onEachFeature: function (feature, layer) {
 			var out = [];
 				if (feature.properties){
@@ -59,7 +68,22 @@ map.on('popupopen', function(e) {
     map.panTo(map.unproject(px),{animate: true}); // pan to new center
 });
 
-var ocean =  L.geoJSON(ocean550);
+var ocean =  L.geoJSON(ocean550 , {
+		onEachFeature: function (feature, layer) {
+			var out = [];
+				if (feature.properties){
+          out.push(feature.properties.Des + " For more information, see: " + feature.properties.URL);
+
+          out.push("<img src='./thumbs/demonstrationreduced.jpg'/>");
+
+
+					/*for(key in f.properties){
+						out.push(key+": "+f.properties[key]); //pushes out .geoJSON attributes exported from ArcGIS
+					}*/
+				}
+			layer.bindPopup(out.join("<br />"), {closeOnClick:true});
+
+		},});
 
 var depth = L.geoJSON(depth550);
 //List of desired baseMap layers
@@ -114,9 +138,16 @@ var depth = L.geoJSON(depth550);
 
 
   });
-
-var oceanMarker = L.marker([43.073168,-70.761930]);
-oceanMarker.bindPopup("This layer, from the City of Portsmouth's Coastal Resilience Initiative, shows what Portsmouth may look like in the year 2100 with the worst-case-scenario of a storm surge combined with rising ocean levels: eighteen feet.  https://www.cityofportsmouth.com/planportsmouth/cri").openPopup();
+  function getColor(era) {
+      return  era == "1779" ? '#183159' :
+          era == "1813"  ? '#4b65b0' :
+          era == "1850"  ? '#472d2e' :
+          era == "1876"  ? '#715455' :
+          era == "1925"  ? '#8c2a1d' :
+          era == "1953"  ? '#d7402a' :
+          era == "1980"  ? '#a0a442' :
+                          '#646629';
+  }
 
 function oceanCheck(filter) {
   if (filter==2100) {
@@ -183,6 +214,17 @@ function mapCheck(filter) {
           }
         layer.bindPopup(out.join("<br />"), {height: "600px", width:"1000px", closeOnClick:true});
     		},
+        pointToLayer: function (feature, latlng) {
+          var markerStyle = {
+              fillColor: getColor(feature.properties.StartDate),
+              color: "#FFF",
+              fillOpacity: 1,
+              opacity: 0.5,
+              weight: 1,
+              radius: 10
+          };
+          return L.circleMarker(latlng, markerStyle);
+      },
         filter:
         function(feature, layer) {
           return (eraFilter>=feature.properties.StartDate );
@@ -210,6 +252,45 @@ function mapCheck(filter) {
         slider.addEventListener('mouseout', function () {
               map.dragging.enable();
             });
+
+            const legend = L.control.Legend({
+                    position: "bottomright",
+                    collapsed: false,
+                    symbolWidth: 24,
+                    opacity: 1,
+                    column: 2,
+                    legends: [{
+                        label: "1779",
+                        type: "circle",
+                        fillColor: "#183159"
+                    },{
+                        label: "1813",
+                        type: "circle",
+                        fillColor: "#4b65b0"
+                    },  {
+                        label: "1850",
+                        type: "circle",
+                        fillColor: "#472d2e"
+                    }, {
+                        label: "1876",
+                        type: "circle",
+                        fillColor: "#715455"
+                    }, {
+                        label: "1925",
+                        type: "circle",
+                        fillColor: "#8c2a1d"
+                    }, {
+                        label: "1953",
+                        type: "circle",
+                        fillColor: "#d7402a"
+                    }, {
+                        label: "1980",
+                        type: "circle",
+                        fillColor: "#a0a442"
+                    }, ]
+                })
+                .addTo(map);
+
 /*
 var surveyArea = L.geoJSON(zoneAreas, {style: {color:"red", stroke:1, fillOpacity:0}}).addTo(map);
 
