@@ -27,7 +27,56 @@ var portsmouth1980 = L.tileLayer('./georeferencedMaps/1980/1980/{z}/{x}/{y}.png'
 
 
 imageloc="./thumbs/";
+var firepoly1802 = L.geoJSON(fire1802, {
+  onEachFeature: function (feature, layer) {
+    var out = [];
+      if (feature.properties){
+        out.push("<img src = '.\\thumbs\\1802firereduced.png'/>");
+        out.push("Image courtesy of the Portsmouth Athenaeum and the City of Portsmouth");
+        out.push(" ");
+        out.push("<i>December 26—Sunday, about four in the morning, the town was alarmed by the cry of fire, which was discovered in the building occupied by the New Hampshire Bank.  Before many of the inhabitants could assemble, the fire burst out through the sides of the house, which was soon enveloped in flames. The fire was communicated to the adjacent buildings with such great rapidity, as to render it impossible to arrest its progress, until a large proportion of the town was laid in ashes. Every building on the parade, except the meetinghouse and Courthouse, was destroyed. The upper end of Daniel Street was consumed as far as the property of Captain Elijah Hall on the north side, and that of Mrs. Hart on the south, whose houses were preserved. To the northward the destruction was far more extensive. The buildings on Market-street and Fore-street, as high as Mrs. Whipple’s, those on Bow-street, as far as the store of Mr. Cutt on Church-hill, those on Cross Street to the top of Dwyer hill, and those on Ladd-street, except one, fell victims to the devouring flames. The amount of property destroyed was estimated at the sum of two hundred thousand dollars.</i>");
+        out.push("Adams, N. (1825). <i>Annals of Portsmouth</i>. Peter E. Randall. Portsmouth, NH.");
+      }
+    layer.bindPopup(out.join("<br />"), {height: "600px", width:"1000px", closeOnClick:true});
 
+  }
+});
+
+firepoly1802.setStyle({fillColor: 'orange'});
+
+var firepoly1806 = L.geoJSON(fire1806, {
+  onEachFeature: function (feature, layer) {
+    var out = [];
+      if (feature.properties){
+        out.push("<img src = '.\\thumbs\\1806firereduced.jpeg'/>");
+
+        out.push(" ");
+        out.push("<i>December 24—A conflagration known as the Chapel Street Fire took place in which Queen’s Chapel (St. John’s Church) and fifteen other buildings were destroyed. The fire started in a store owned by Stephen Little. There were five engines in the town, and the Firewards were assigned to inspect them on the first Monday of each month. Four leading citizens ‘to be a company under the direction of the Firewards to repair to the State House on the Cry for Alarm of Fire, and bring the Hooks, Ropes, and the other apparatus immediately on the Spot and take care of them, and after the fire is extinguished to return them back to the State House again.’ The regulations to prevent fires issued by the Firewards were stringent and had to be strictly obeyed.</i>");
+        out.push("Adams, N. (1825). <i>Annals of Portsmouth</i>. Peter E. Randall. Portsmouth, NH.");
+      }
+    layer.bindPopup(out.join("<br />"), {height: "600px", width:"1000px", closeOnClick:true});
+
+  }
+});
+firepoly1806.setStyle({fillColor: 'green'});
+
+var firepoly1813 = L.geoJSON(fire1813, {
+  onEachFeature: function (feature, layer) {
+    var out = [];
+      if (feature.properties){
+        out.push("<img src = '.\\thumbs\\1813firereduced.png'/>");
+        out.push(" ");
+        out.push("Image courtesy of the Portsmouth Athenaeum and the City of Portsmouth");
+        out.push(" ");
+        out.push("Destroyed by fire December 22, 1813");
+        out.push("In 1814, in an effort to make Portsmouth less fire-prone, the Brick Act was passed, requiring any new building over 12 feet high in the densely populated downtown area to be built of brick with a slate roof.");
+    layer.bindPopup(out.join("<br />"), {height: "600px", width:"1000px", closeOnClick:true});
+
+  }
+}});
+
+
+firepoly1813.setStyle({fillColor: 'red'});
 var allsites =  L.geoJSON(sites, {
   pointToLayer: function (feature, latlng) {
     var markerStyle = {
@@ -152,6 +201,9 @@ function mapCheck(filter) {
   }
   else if (filter==1813) {
     map.addLayer(portsmouth1813);
+    map.addLayer(firepoly1802);
+    map.addLayer(firepoly1806);
+    map.addLayer(firepoly1813);
   }
   else if (filter==1850) {
     map.addLayer(portsmouth1850);
@@ -184,6 +236,9 @@ function mapCheck(filter) {
       map.removeLayer(portsmouth1925);
       map.removeLayer(portsmouth1953);
       map.removeLayer(portsmouth1980);
+      map.removeLayer(firepoly1802);
+      map.removeLayer(firepoly1806);
+      map.removeLayer(firepoly1813);
 
       oceanCheck(eraFilter);
       mapCheck(eraFilter)
