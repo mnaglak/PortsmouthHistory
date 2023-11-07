@@ -77,6 +77,20 @@ var firepoly1813 = L.geoJSON(fire1813, {
 
 
 firepoly1813.setStyle({fillColor: 'red'});
+
+var reconstruction = L.geoJSON(poly1954, {
+  onEachFeature: function (feature, layer) {
+    var out = [];
+    if (feature.properties){
+      out.push("<img src = '.\\thumbs\\1953imagereduced.jpg'/>");
+      out.push("Image courtesy of the Portsmouth Athenaeum");
+      out.push("<b>Urban Renewal</b>");
+      out.push("The late 1960s and early 1970s saw the razing of Portsmouth’s Little Italy neighborhood in the Vaughan Street Urban Renewal Project. Only three structures within the indicated area were saved, and it was decades before the modern structures and economic benefits supposedly encouraged by the project were seen. The public outcry and resulting civic engagement resulted in the creation of historic preservation groups and raised awareness of the value intrinsic in the historic structures across Portsmouth.");
+      layer.bindPopup(out.join("<br />"), {height: "600px", width:"1000px", closeOnClick:true});
+
+      }
+    }});
+reconstruction.setStyle({fillColor: 'teal'});
 var allsites =  L.geoJSON(sites, {
   pointToLayer: function (feature, latlng) {
     var markerStyle = {
@@ -216,6 +230,7 @@ function mapCheck(filter) {
   }
   else if (filter==1953) {
     map.addLayer(portsmouth1953);
+    map.addLayer(reconstruction);
   }
   else if (filter==1980) {
     map.addLayer(portsmouth1980)
@@ -239,6 +254,7 @@ function mapCheck(filter) {
       map.removeLayer(firepoly1802);
       map.removeLayer(firepoly1806);
       map.removeLayer(firepoly1813);
+      map.removeLayer(reconstruction);
 
       oceanCheck(eraFilter);
       mapCheck(eraFilter)
