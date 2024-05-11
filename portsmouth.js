@@ -172,12 +172,13 @@ var depth = L.geoJSON(depth550);
       snap: true,
       range: {
           'min': [1779],
-          '14%': [1813],
-          '28%': [1850],
-          '42%': [1876],
-          '57%': [1925],
-          '71%': [1953],
-          '85%': [1980],
+          '12%': [1813],
+          '24%': [1850],
+          '36%': [1876],
+          '48%': [1925],
+          '60%': [1953],
+          '74%': [1980],
+		  '87%': [2023],
           'max': [2100]
       },
     //  tooltips:[
@@ -194,12 +195,13 @@ var depth = L.geoJSON(depth550);
   });
   function getColor(era) {
       return  era == "1779" ? '#183159' :
-          era == "1813"  ? '#4b65b0' :
+          era == "1813"  ? '#ADD8E6' :
           era == "1850"  ? '#472d2e' :
-          era == "1876"  ? '#715455' :
+          era == "1876"  ? '#D2B48C' :
           era == "1925"  ? '#8c2a1d' :
           era == "1953"  ? '#d7402a' :
           era == "1980"  ? '#a0a442' :
+		  era == "2023"  ? '#FFA500' :
                           '#646629';
   }
 
@@ -290,7 +292,7 @@ function mapCheck(filter) {
       },
         filter:
         function(feature, layer) {
-          return (eraFilter>=feature.properties.StartDate );
+          return (eraFilter>=feature.properties.StartDate && eraFilter<=feature.properties.EndDate);
         }
     }).addTo(map);
   });
@@ -329,7 +331,7 @@ function mapCheck(filter) {
                     },{
                         label: "1813",
                         type: "circle",
-                        fillColor: "#4b65b0"
+                        fillColor: "#ADD8E6"
                     },  {
                         label: "1850",
                         type: "circle",
@@ -337,7 +339,7 @@ function mapCheck(filter) {
                     }, {
                         label: "1876",
                         type: "circle",
-                        fillColor: "#715455"
+                        fillColor: "#D2B48C"
                     }, {
                         label: "1925",
                         type: "circle",
@@ -350,6 +352,11 @@ function mapCheck(filter) {
                         label: "1980",
                         type: "circle",
                         fillColor: "#a0a442"
-                    }, ]
+                    },
+						{
+                        label: "2023",
+                        type: "circle",
+                        fillColor: "#FFA500"
+                    }]
                 })
                 .addTo(map);
